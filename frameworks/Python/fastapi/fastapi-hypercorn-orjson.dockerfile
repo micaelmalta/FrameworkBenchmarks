@@ -8,12 +8,10 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY requirements*.txt ./
 
 RUN pip3 install cython==0.29.13 && \
-    pip3 install -r /fastapi/requirements.txt -r /fastapi/requirements-gunicorn.txt
+    pip3 install -r /fastapi/requirements.txt -r /fastapi/requirements-orjson.txt -r /fastapi/requirements-hypercorn.txt
 
 COPY . ./
 
 EXPOSE 8080
 
-ENV CONNECTION=ORM
-
-CMD gunicorn app.app:app -k uvicorn.workers.UvicornWorker -c fastapi_conf.py
+CMD hypercorn app.app:app --bind 0.0.0.0:8080 --workers $(nproc)

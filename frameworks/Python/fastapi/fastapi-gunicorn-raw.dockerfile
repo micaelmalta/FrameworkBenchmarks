@@ -14,6 +14,4 @@ COPY . ./
 
 EXPOSE 8080
 
-ENV CONNECTION=ORM
-
 CMD gunicorn app.app:app -k uvicorn.workers.UvicornWorker -c fastapi_conf.py

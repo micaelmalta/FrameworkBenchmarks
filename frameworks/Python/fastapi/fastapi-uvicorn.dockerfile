@@ -8,12 +8,10 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY requirements*.txt ./
 
 RUN pip3 install cython==0.29.13 && \
-    pip3 install -r /fastapi/requirements.txt -r /fastapi/requirements-gunicorn.txt
+    pip3 install -r /fastapi/requirements.txt -r /fastapi/requirements-uvicorn.txt
 
 COPY . ./
 
 EXPOSE 8080
 
-ENV CONNECTION=ORM
-
-CMD gunicorn app.app:app -k uvicorn.workers.UvicornWorker -c fastapi_conf.py
+CMD uvicorn app.app:app --host 0.0.0.0 --port 8080 --workers $(nproc) --log-level error
